@@ -29,10 +29,14 @@ from SolixBLE import (
 from .const import (
     CHARGING_STATUS_C300_STRINGS,
     CHARGING_STATUS_F3800_STRINGS,
+    CUT_OFF_SB2_STRINGS,
     GRID_STATUS_STRINGS,
+    LIGHT_STATUS_SB2_STRINGS,
     LIGHT_STATUS_STRINGS,
+    MAX_LOAD_SB2_STRINGS,
     OVERLOAD_STATUS_C300DC_STRINGS,
     PORT_STATUS_STRINGS,
+    USAGE_MODE_SB2_STRINGS,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -156,9 +160,10 @@ async def async_setup_entry(
             SolixSensorEntity(
                 device,
                 "Battery input energy",
-                "Wh",
+                "kWh",
                 "charged_energy",
                 SensorDeviceClass.ENERGY,
+                state_class=None,
             )
         )
 
@@ -168,9 +173,38 @@ async def async_setup_entry(
             SolixSensorEntity(
                 device,
                 "Battery output energy",
-                "Wh",
+                "kWh",
                 "output_energy",
                 SensorDeviceClass.ENERGY,
+                state_class=None,
+            )
+        )
+
+    # Output cutoff thresholds
+    if type(device) in [Solarbank2]:
+        sensors.append(
+            SolixSensorEntity(
+                device,
+                "Output cutoff threshold",
+                None,
+                "output_cutoff_data",
+                SensorDeviceClass.ENUM,
+                CUT_OFF_SB2_STRINGS,
+                state_class=None,
+            )
+        )
+
+    # Input cutoff thresholds
+    if type(device) in [Solarbank2]:
+        sensors.append(
+            SolixSensorEntity(
+                device,
+                "Input cutoff threshold",
+                None,
+                "input_cutoff_data",
+                SensorDeviceClass.ENUM,
+                CUT_OFF_SB2_STRINGS,
+                state_class=None,
             )
         )
 
@@ -212,7 +246,7 @@ async def async_setup_entry(
                 "ac_power_in",
                 SensorDeviceClass.POWER,
             )
-        ),
+        )
 
     # AC power out sensor
     if type(device) in [C300, C800, C1000, C1000G2, F2000, F3800, Solarbank2]:
@@ -224,7 +258,7 @@ async def async_setup_entry(
                 "ac_power_out",
                 SensorDeviceClass.POWER,
             )
-        ),
+        )
 
     # AC output on/off sensor
     if type(device) in [C300, C800, C1000, C1000G2, F3800]:
@@ -266,15 +300,15 @@ async def async_setup_entry(
         )
 
     # Solar yield
-    # TODO: Unit may not be correct
     if type(device) in [Solarbank2]:
         sensors.append(
             SolixSensorEntity(
                 device,
                 "PV Yield",
-                "Wh",
+                "kWh",
                 "pv_yield",
                 SensorDeviceClass.ENERGY,
+                state_class=None,
             )
         )
 
@@ -873,9 +907,10 @@ async def async_setup_entry(
             SolixSensorEntity(
                 device,
                 "Grid import energy",
-                "Wh",
+                "kWh",
                 "grid_import_energy",
                 SensorDeviceClass.ENERGY,
+                state_class=None,
             )
         )
 
@@ -885,9 +920,10 @@ async def async_setup_entry(
             SolixSensorEntity(
                 device,
                 "Grid export energy",
-                "Wh",
+                "kWh",
                 "grid_export_energy",
                 SensorDeviceClass.ENERGY,
+                state_class=None,
             )
         )
 
@@ -909,9 +945,10 @@ async def async_setup_entry(
             SolixSensorEntity(
                 device,
                 "House consumed energy",
-                "Wh",
+                "kWh",
                 "consumed_energy",
                 SensorDeviceClass.ENERGY,
+                state_class=None,
             )
         )
 
@@ -920,7 +957,7 @@ async def async_setup_entry(
         sensors.append(
             SolixSensorEntity(
                 device,
-                "Sockets AC Power Out",
+                "AC Power Out Sockets",
                 "W",
                 "ac_power_out_sockets",
                 SensorDeviceClass.POWER,
@@ -933,9 +970,24 @@ async def async_setup_entry(
             SolixSensorEntity(
                 device,
                 "Maximum load",
-                "W",
+                None,
                 "max_load",
-                SensorDeviceClass.POWER,
+                SensorDeviceClass.ENUM,
+                MAX_LOAD_SB2_STRINGS,
+                state_class=None,
+            )
+        )
+
+    if type(device) in [Solarbank2]:
+        sensors.append(
+            SolixSensorEntity(
+                device,
+                "Usage mode",
+                None,
+                "usage_mode",
+                SensorDeviceClass.ENUM,
+                USAGE_MODE_SB2_STRINGS,
+                state_class=None,
             )
         )
 
@@ -987,6 +1039,20 @@ async def async_setup_entry(
             )
         )
 
+    # Solarbank light status
+    if type(device) in [Solarbank2]:
+        sensors.append(
+            SolixSensorEntity(
+                device,
+                "Status light",
+                None,
+                "light_mode",
+                SensorDeviceClass.ENUM,
+                LIGHT_STATUS_SB2_STRINGS,
+                None,
+            )
+        )
+
     # Grid status
     if type(device) in [Solarbank2]:
         sensors.append(
@@ -1006,12 +1072,12 @@ async def async_setup_entry(
         sensors.append(
             SolixSensorEntity(
                 device,
-                "Heater on",
+                "Battery Heating",
                 None,
                 "battery_heating",
                 None,
             )
-        ),
+        )
 
     async_add_entities(sensors)
 
@@ -1074,7 +1140,9 @@ class SolixSensorEntity(SensorEntity):
 
         # If enum use enum strings
         elif self._attr_device_class == SensorDeviceClass.ENUM:
-            self._attr_native_value = self._attr_options[attribute_value.value + 1]
+            self._attr_native_value = self._attr_options[
+                list(type(attribute_value)).index(attribute_value)
+            ]
 
         # Else pass through value
         else:
