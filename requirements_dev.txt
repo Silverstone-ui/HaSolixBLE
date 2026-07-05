@@ -6,4 +6,4 @@ pytest-cov
 aiousbwatcher
 ruff
 mypy
-SolixBLE==3.8.0
+SolixBLE@git+https://github.com/flip-dots/SolixBLE@60c6679d5e398a18ded159e7565bc1e85346f5b2
