@@ -31,7 +31,7 @@ CHARGING_STATUS_F3800_STRINGS = [
 # Light status #
 ################
 
-LIGHT_STATUS_STRINGS = ["Unknown", "Off", "Low", "Medium", "High"]
+LIGHT_STATUS_STRINGS = ["Unknown", "Off", "Low", "Medium", "High", "SOS"]
 
 LIGHT_STATUS_SB2_STRINGS = ["Unknown", "Normal", "Mood"]
 
@@ -92,6 +92,7 @@ class Models(Enum):
     C1000 = "C1000(X)"
     C1000G2 = "C1000(X) Gen 2"
     F2000 = "F2000 (767)"
+    F2000_ALT = "F2000 (767) - Alt Protocol"
     F3800 = "F3800"
     PRIME_CHARGER_160 = "Prime Charger (160w)"
     PRIME_CHARGER_250 = "Prime Charger (250w)"
