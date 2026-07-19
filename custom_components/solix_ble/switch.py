@@ -9,7 +9,15 @@ from homeassistant.components.switch import SwitchEntity
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import CONNECTION_BLUETOOTH, DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from SolixBLE import C300, C800, C1000, PortStatus, PrimeCharger160w, SolixBLEDevice
+from SolixBLE import (
+    C300,
+    C800,
+    C1000,
+    F2000Alt,
+    PortStatus,
+    PrimeCharger160w,
+    SolixBLEDevice,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -29,7 +37,7 @@ async def async_setup_entry(
     switches: list[SolixSwitchEntity] = []
 
     # Support for AC output switch with status
-    if type(device) in [C300, C800, C1000]:
+    if type(device) in [C300, C800, C1000, F2000Alt]:
         switches.append(
             SolixSwitchEntity(
                 device,
@@ -42,7 +50,7 @@ async def async_setup_entry(
         )
 
     # Support for DC output switch with status
-    if type(device) in [C300]:
+    if type(device) in [C300, F2000Alt]:
         switches.append(
             SolixSwitchEntity(
                 device,
@@ -51,6 +59,19 @@ async def async_setup_entry(
                 "dc_output",
                 "turn_dc_on",
                 "turn_dc_off",
+            ),
+        )
+
+    # Support for power saving mode switch without status
+    if type(device) in [F2000Alt]:
+        switches.append(
+            SolixSwitchEntity(
+                device,
+                "Power Saving Mode",
+                "power_saving_mode",
+                None,
+                "turn_power_saving_mode_on",
+                "turn_power_saving_mode_off",
             ),
         )
 

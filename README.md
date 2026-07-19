@@ -7,6 +7,7 @@ Home Assistant integration for monitoring and controlling Anker devices using a 
 - 🔋 Battery percentage
 - ⚡ Total Power In/Out
 - 🎛️ AC/DC output control
+- 🔋 Power saving mode control (select devices)
 - 🔌 AC Power In/Out
 - 🚗 DC Power In/Out
 - ⏰ AC/DC Timer value
@@ -32,7 +33,12 @@ This lists the supported devices, more information on what features are supporte
 - C800(X)
 - C1000(X)
 - C1000(X) Gen 2
-- F2000
+- F2000 (767 PowerHouse) — select "F2000 (767) - Alt Protocol" in the setup
+  dropdown if your unit needs it; some units speak a different, unencrypted
+  protocol instead of the standard one, likely gated by a firmware-specific
+  revision rather than distinct hardware. See the underlying library's
+  [hardware variant docs](https://solixble.readthedocs.io/en/latest/f2000_hardware_variant.html)
+  for how to tell which one you have.
 - F3800
 - Anker Prime 160w Charger
 - Anker Prime 250w Charger
