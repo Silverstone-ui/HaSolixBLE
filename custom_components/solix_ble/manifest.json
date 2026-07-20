@@ -20,5 +20,5 @@
     "issue_tracker": "https://github.com/flip-dots/HaSolixBLE/issues",
     "requirements": ["SolixBLE @ git+https://github.com/Silverstone-ui/SolixBLEF2000.git@main"],
     "loggers": ["bleak", "SolixBLE"],
-    "version": "3.5.0"
+    "version": "3.5.1"
 }

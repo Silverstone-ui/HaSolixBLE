@@ -62,14 +62,14 @@ async def async_setup_entry(
             ),
         )
 
-    # Support for power saving mode switch without status
+    # Support for power saving mode switch with status
     if type(device) in [F2000Alt]:
         switches.append(
             SolixSwitchEntity(
                 device,
                 "Power Saving Mode",
                 "power_saving_mode",
-                None,
+                "power_saving_mode_enabled",
                 "turn_power_saving_mode_on",
                 "turn_power_saving_mode_off",
             ),
