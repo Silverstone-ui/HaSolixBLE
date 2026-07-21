@@ -154,6 +154,13 @@ MOCK_F2000_DETAILS = MockDeviceDetails(
     model_class=Models.F2000,
 )
 
+MOCK_F2000ALT_DETAILS = MockDeviceDetails(
+    name="Anker SOLIX F2000 Alt",
+    addr="AA:BB:CC:DD:EE:07",
+    model_string="F2000 (767) - Alt Protocol",
+    model_class=Models.F2000_ALT,
+)
+
 MOCK_F3800_DETAILS = MockDeviceDetails(
     name="Anker SOLIX F3800",
     addr="AA:BB:CC:DD:EE:03",

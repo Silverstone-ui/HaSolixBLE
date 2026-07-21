@@ -27,6 +27,7 @@ from . import (
     MOCK_C300_DETAILS,
     MOCK_C800_DETAILS,
     MOCK_C1000_DETAILS,
+    MOCK_F2000ALT_DETAILS,
     MOCK_PRIME_160_DETAILS,
     MockDeviceDetails,
 )
@@ -133,6 +134,17 @@ from . import (
             "turn_display_off",
             None,
             id="c1000_display",
+        ),
+        pytest.param(
+            MOCK_F2000ALT_DETAILS,
+            MOCK_F2000ALT_DETAILS,
+            "F2000Alt",
+            "power_saving_mode",
+            "power_saving_mode_enabled",
+            "turn_power_saving_mode_on",
+            "turn_power_saving_mode_off",
+            (False, True, False),
+            id="f2000alt_power_saving_mode",
         ),
         pytest.param(
             MOCK_PRIME_160_DETAILS,
