@@ -113,7 +113,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: SolixBLEConfigEntry) -> 
     entry.runtime_data = device
 
     await hass.config_entries.async_forward_entry_setups(
-        entry, [Platform.SENSOR, Platform.SWITCH]
+        entry, [Platform.SENSOR, Platform.SWITCH, Platform.SELECT]
     )
 
     return True
@@ -128,9 +128,12 @@ async def async_unload_entry(hass: HomeAssistant, entry: SolixBLEConfigEntry) ->
     unload_ok_switch = await hass.config_entries.async_forward_entry_unload(
         entry, Platform.SWITCH
     )
+    unload_ok_select = await hass.config_entries.async_forward_entry_unload(
+        entry, Platform.SELECT
+    )
 
     await entry.runtime_data.disconnect()
 
     entry.runtime_data = None
 
-    return unload_ok_sensor and unload_ok_switch
+    return unload_ok_sensor and unload_ok_switch and unload_ok_select
